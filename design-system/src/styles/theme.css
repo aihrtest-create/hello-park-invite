@@ -1,0 +1,186 @@
+/* ─── Hello Park · DR Constructor — CSS Theme Variables ──────────────────────
+   Import this file once in your project (e.g. in main.css or main.tsx).
+   Works with Tailwind CSS v4 (@theme inline) and plain CSS var() usage.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+
+  /* Surfaces */
+  --background:          #F7F7F7;
+  --foreground:          #1A1A1A;
+  --card:                #ffffff;
+  --card-foreground:     #1A1A1A;
+  --popover:             #ffffff;
+  --popover-foreground:  #1A1A1A;
+
+  /* Brand */
+  --primary:             #FF6022;
+  --primary-foreground:  #ffffff;
+  --accent:              #6C4AED;
+  --accent-foreground:   #ffffff;
+
+  /* Neutrals */
+  --secondary:           #F5F5F5;
+  --secondary-foreground:#1A1A1A;
+  --muted:               #F5F5F5;
+  --muted-foreground:    #747474;
+
+  /* Semantic */
+  --destructive:         #d4183d;
+  --destructive-foreground: #ffffff;
+
+  /* Borders / inputs */
+  --border:              #E5E5E5;
+  --input:               transparent;
+  --input-background:    #F5F5F5;
+  --switch-background:   #cbced4;
+
+  /* Typography weights */
+  --font-weight-medium:  600;
+  --font-weight-normal:  400;
+
+  /* Focus ring */
+  --ring:                #FF6022;
+
+  /* Border radius scale */
+  --radius:              0.625rem; /* 10px base */
+
+  /* Hello Park brand palette */
+  --hp-orange:           #FF6022;
+  --hp-orange-bright:    #FF8A1C;
+  --hp-orange-deep:      #FF5000;
+  --hp-yellow:           #FFB81C;
+  --hp-pink:             #FF5C8A;
+  --hp-purple-deep:      #5B2EBE;
+  --hp-purple-soft:      #A48BF5;
+  --hp-lavender:         #E9DEFF;
+  --hp-lavender-deep:    #C9B6FF;
+  --hp-cream:            #FFF7E5;
+  --hp-green-tag:        #7DEAA0;
+  --hp-green-tag-text:   #0E5C2D;
+  --hp-bg-warm:          #FFF5E0;
+  --hp-bg-purple:        #3F1E94;
+  --hp-ink:              #1A1A1A;
+  --hp-ink-soft:         #5C5170;
+  --hp-ink-muted:        #8E889E;
+}
+
+.dark {
+  --background:          oklch(0.145 0 0);
+  --foreground:          oklch(0.985 0 0);
+  --card:                oklch(0.145 0 0);
+  --card-foreground:     oklch(0.985 0 0);
+  --popover:             oklch(0.145 0 0);
+  --popover-foreground:  oklch(0.985 0 0);
+  --primary:             oklch(0.985 0 0);
+  --primary-foreground:  oklch(0.205 0 0);
+  --secondary:           oklch(0.269 0 0);
+  --secondary-foreground:oklch(0.985 0 0);
+  --muted:               oklch(0.269 0 0);
+  --muted-foreground:    oklch(0.708 0 0);
+  --accent:              oklch(0.269 0 0);
+  --accent-foreground:   oklch(0.985 0 0);
+  --destructive:         oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border:              oklch(0.269 0 0);
+  --input:               oklch(0.269 0 0);
+  --ring:                oklch(0.439 0 0);
+  --font-weight-medium:  500;
+}
+
+/* Tailwind v4 @theme inline mapping */
+@theme inline {
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-destructive-foreground:  var(--destructive-foreground);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-input-background:        var(--input-background);
+  --color-switch-background:       var(--switch-background);
+  --color-ring:                    var(--ring);
+
+  /* Hello Park custom colors exposed as Tailwind classes */
+  --color-hp-orange:               var(--hp-orange);
+  --color-hp-orange-bright:        var(--hp-orange-bright);
+  --color-hp-yellow:               var(--hp-yellow);
+  --color-hp-pink:                 var(--hp-pink);
+  --color-hp-purple-deep:          var(--hp-purple-deep);
+  --color-hp-purple-soft:          var(--hp-purple-soft);
+  --color-hp-lavender:             var(--hp-lavender);
+  --color-hp-lavender-deep:        var(--hp-lavender-deep);
+  --color-hp-cream:                var(--hp-cream);
+  --color-hp-green-tag:            var(--hp-green-tag);
+
+  --radius-sm:   calc(var(--radius) - 4px);
+  --radius-md:   calc(var(--radius) - 2px);
+  --radius-lg:   var(--radius);
+  --radius-xl:   calc(var(--radius) + 4px);
+}
+
+/* ─── Base typography ────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Gilroy', 'Nunito', sans-serif;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
+  }
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
+  }
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.4;
+  }
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@mega-park/design-system",
+  "version": "1.0.0",
+  "description": "Hello Park — DR Constructor Design System (tokens, CSS vars, React components)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles": "./src/styles/index.css",
+    "./theme": "./src/styles/theme.css",
+    "./fonts": "./src/styles/fonts.css"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "lucide-react": ">=0.4",
+    "motion": ">=12",
+    "class-variance-authority": ">=0.7",
+    "tailwind-merge": ">=2",
+    "clsx": ">=2",
+    "@radix-ui/react-slot": ">=1"
+  },
+  "keywords": [
+    "design-system",
+    "hello-park",
+    "birthday-constructor",
+    "react",
+    "tailwindcss"
+  ]
+}
