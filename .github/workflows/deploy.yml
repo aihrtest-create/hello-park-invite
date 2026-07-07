@@ -29,6 +29,16 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
+          # 0. Настройка файла подкачки (Swap) для слабых серверов (защита от нехватки памяти)
+          if [ $(free -m | awk '/^Swap:/ {print $2}') -eq 0 ]; then
+            echo "Создаю файл подкачки (Swap) на 2GB..."
+            sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+            sudo chmod 600 /swapfile
+            sudo mkswap /swapfile
+            sudo swapon /swapfile
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+          fi
+
           # 1. Установка Docker (если его еще нет на сервере)
           if ! command -v docker &> /dev/null; then
             echo "Установка Docker..."
