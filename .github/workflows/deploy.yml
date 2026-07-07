@@ -55,5 +55,11 @@ jobs:
 
           # 2. Переход в папку проекта и запуск
           cd ~/apps/hello-park-invite
-          echo "Сборка и запуск проекта..."
-          docker-compose up -d --build
+          echo "Остановка старого контейнера..."
+          docker-compose down || true
+          echo "Удаление старого образа (чтобы не было кеша)..."
+          docker rmi $(docker images -q hello-park-invite* 2>/dev/null) 2>/dev/null || true
+          docker system prune -f 2>/dev/null || true
+          echo "Сборка и запуск проекта (без кеша)..."
+          docker-compose build --no-cache
+          docker-compose up -d
