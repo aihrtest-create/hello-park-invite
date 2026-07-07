@@ -484,7 +484,7 @@ export default function InvitationService() {
       const event_id = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
       
       if (event_id) {
-        const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
         await fetch(`${apiBaseUrl}/api/rsvps`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

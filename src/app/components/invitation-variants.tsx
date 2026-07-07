@@ -584,7 +584,7 @@ export default function InvitationVariants() {
                       {/* Overlapping 3D Emoji Asset (Perfect Absolute Alignment) */}
                       <div className="absolute -top-[76px] left-1/2 -translate-x-1/2 w-[140px] h-[140px] z-30 pointer-events-none drop-shadow-[0_12px_20px_rgba(0,0,0,0.15)] select-none">
                         <img 
-                          src={`${import.meta.env.BASE_URL || "/"}${activeVariant.emojiPath.replace(/^\//, "")}`} 
+                          src={`/${activeVariant.emojiPath.replace(/^\//, '')}`}
                           alt="3D Emoji"
                           className="w-full h-full object-contain animate-bounce"
                           style={{
