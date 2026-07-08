@@ -1095,17 +1095,9 @@ export default function InvitationService() {
                     href={generatedLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-[2] bg-slate-100 text-slate-700 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-slate-200 transition-colors"
+                    className="w-full bg-slate-100 text-slate-700 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-slate-200 transition-colors"
                   >
                     {formData.lang === 'en' ? 'Open' : formData.lang === 'ar' ? 'فتح' : 'Открыть'}
-                  </a>
-                  <a
-                    href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=${encodeURIComponent(getShareMessage(formData.name, formData.lang, "").replace(/:\s*$/, ""))}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-[#0088cc]/10 text-[#0088cc] rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-1 hover:bg-[#0088cc]/20 transition-colors"
-                  >
-                    <span>✈️ Telegram</span>
                   </a>
                 </div>
               </div>

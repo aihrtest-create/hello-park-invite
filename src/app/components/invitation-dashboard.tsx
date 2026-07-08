@@ -271,9 +271,9 @@ export default function InvitationDashboard() {
               <span className="text-[10px] font-bold uppercase tracking-wider">{t.totalComing}</span>
             </div>
             <div>
-              <span className="text-3xl font-black block leading-none">{stats?.total_coming || 0}</span>
+              <span className="text-3xl font-black block leading-none">{stats?.total_kids || 0}</span>
               <span className="text-xs font-medium opacity-90 block mt-1">
-                {t.kids} {stats?.total_kids || 0} | {t.adults} {stats?.total_adults || 0}
+                {t.adults} {stats?.total_adults || 0}
               </span>
             </div>
           </div>
