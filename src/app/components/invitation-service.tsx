@@ -1122,7 +1122,7 @@ export default function InvitationService() {
                 
                 <div className="flex gap-2">
                   <a 
-                    href={generatedLink.replace('/?invite=', '/invite-dashboard?id=')}
+                    href={generatedLink.replace('/?invite=', '/dashboard?id=')}
                     target="_blank"
                     rel="noreferrer"
                     className="flex-[3] bg-orange-500 text-white rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2 shadow-sm shadow-orange-500/20 hover:bg-orange-600 transition-colors"
@@ -1131,7 +1131,7 @@ export default function InvitationService() {
                   </a>
                   <button 
                     onClick={() => {
-                      navigator.clipboard.writeText(generatedLink.replace('/?invite=', '/invite-dashboard?id='));
+                      navigator.clipboard.writeText(generatedLink.replace('/?invite=', '/dashboard?id='));
                       confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
                     }}
                     className="flex-1 bg-orange-50 text-orange-600 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-orange-100 transition-colors"
