@@ -219,7 +219,8 @@ export default function InvitationDashboard() {
 
   const handleCopyLink = () => {
     const origin = window.location.origin;
-    const guestLink = `${origin}/invite?invite=${eventId}`;
+    const basePath = window.location.pathname.startsWith('/hello-park-invite') ? '/hello-park-invite' : '';
+    const guestLink = `${origin}${basePath}/invite?invite=${eventId}`;
     
     navigator.clipboard.writeText(guestLink);
     setIsCopied(true);
