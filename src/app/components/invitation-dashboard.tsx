@@ -104,6 +104,62 @@ const translations = {
     minAgo: "دقيقة مضت",
     hrAgo: "ساعة مضت",
     daysAgo: "أيام مضت",
+  },
+  es: {
+    notFoundTitle: "Enlace no encontrado",
+    notFoundDesc: "Asegúrate de haber utilizado el enlace correcto.",
+    headerTitle: "Panel del Organizador",
+    guestLinkTitle: "Enlace para invitados",
+    guestLinkDesc: "Copia y envía a tus amigos",
+    copyLink: "Copiar enlace",
+    copied: "Copiado",
+    totalComing: "Asistirán",
+    kids: "Niños",
+    adults: "Adultos",
+    cantCome: "No asistirán",
+    declines: "Rechazados",
+    syncBadge: "Sincronizado con Hello Park",
+    responsesList: "Respuestas",
+    responsesCount: "respuestas",
+    noResponsesYet: "Aún no hay respuestas",
+    sendLinkToCollect: "Envía el enlace para recoger confirmaciones",
+    coming: "ASISTIRÁ",
+    notComing: "NO ASISTIRÁ",
+    kidSingle: "niño",
+    kidsPlural: "niños",
+    adultSingle: "adulto",
+    adultsPlural: "adultos",
+    minAgo: "hace min",
+    hrAgo: "hace h",
+    daysAgo: "hace días",
+  },
+  az: {
+    notFoundTitle: "Link tapılmadı",
+    notFoundDesc: "Düzgün idarəetmə paneli linkinə keçdiyinizə əmin olun.",
+    headerTitle: "Təşkilatçı Paneli",
+    guestLinkTitle: "Qonaqlar üçün link",
+    guestLinkDesc: "Kopyalayın və dostlarınıza göndərin",
+    copyLink: "Linki kopyala",
+    copied: "Kopyalandı",
+    totalComing: "Cəmi gələcək",
+    kids: "Uşaqlar",
+    adults: "Böyüklər",
+    cantCome: "Gələ bilməyəcəklər",
+    declines: "İmtinalar",
+    syncBadge: "Məlumatlar Hello Park ilə sinxronlaşdırılıb",
+    responsesList: "Cavabların siyahısı",
+    responsesCount: "cavab",
+    noResponsesYet: "Hələ cavab yoxdur",
+    sendLinkToCollect: "Təsdiqləri toplamaq üçün linki qonaqlara göndərin",
+    coming: "GƏLƏCƏK",
+    notComing: "GƏLMƏYƏCƏK",
+    kidSingle: "uşaq",
+    kidsPlural: "uşaq",
+    adultSingle: "böyük",
+    adultsPlural: "böyük",
+    minAgo: "dəq. əvvəl",
+    hrAgo: "saat əvvəl",
+    daysAgo: "gün əvvəl",
   }
 };
 
@@ -113,7 +169,7 @@ export default function InvitationDashboard() {
   const [loading, setLoading] = useState(true);
   const [eventId, setEventId] = useState("");
   const [isCopied, setIsCopied] = useState(false);
-  const [lang, setLang] = useState<"ru" | "en" | "ar">("ru");
+  const [lang, setLang] = useState<"ru" | "en" | "ar" | "es" | "az">("ru");
 
   useEffect(() => {
     // Extract event ID from URL
@@ -139,17 +195,21 @@ export default function InvitationDashboard() {
     const path = window.location.pathname;
     const urlLang = searchParams.get("lang") || hashParams.get("lang");
     
-    if (urlLang && (urlLang === "ru" || urlLang === "en" || urlLang === "ar")) {
-      setLang(urlLang as "ru" | "en" | "ar");
+    if (urlLang && (urlLang === "ru" || urlLang === "en" || urlLang === "ar" || urlLang === "es" || urlLang === "az")) {
+      setLang(urlLang as "ru" | "en" | "ar" | "es" | "az");
     } else if (path.includes("-en.html")) {
       setLang("en");
     } else if (path.includes("-ar.html")) {
       setLang("ar");
+    } else if (path.includes("-es.html")) {
+      setLang("es");
+    } else if (path.includes("-az.html")) {
+      setLang("az");
     } else {
       // Fallback to localStorage
       const savedLang = localStorage.getItem("hello_park_invitation_lang");
-      if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar")) {
-        setLang(savedLang as "ru" | "en" | "ar");
+      if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar" || savedLang === "es" || savedLang === "az")) {
+        setLang(savedLang as "ru" | "en" | "ar" | "es" | "az");
       }
     }
     
