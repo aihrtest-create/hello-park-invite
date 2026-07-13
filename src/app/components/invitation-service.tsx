@@ -302,7 +302,7 @@ const translations = {
     sendInvite: "Send this invitation",
     open: "Open",
     results: "Results",
-    whereToSee: "Where to see guest answers",
+    whereToSee: "View guest responses",
     whoIsComing: "Who is coming?",
     viewPreview: "View Preview",
     changeResponse: "Change response"
@@ -384,8 +384,8 @@ const translations = {
     backToEnvelope: "Guardar en el sobre",
     guestWillSee: "Vista previa de la invitación:",
     rsvpTitle: "¿Asistirás a la fiesta?",
-    rsvpYes: "Sí, iré",
-    rsvpNo: "No podré ir",
+    rsvpYes: "Asistiremos",
+    rsvpNo: "No podremos asistir",
     rsvpYesToast: "¡Nos vemos allí! 🎉",
     rsvpNoToast: "¡Qué pena, te extrañaremos! 🥺",
     rsvpFormTitle: "Tu nombre / familia",
@@ -414,7 +414,7 @@ const translations = {
     sendInvite: "Envía esta invitación",
     open: "Abrir",
     results: "Resultados",
-    whereToSee: "Dónde ver las respuestas de los invitados",
+    whereToSee: "Ver respuestas",
     whoIsComing: "¿Quién viene?",
     viewPreview: "Ver vista previa",
     changeResponse: "Cambiar respuesta"
@@ -470,7 +470,7 @@ const translations = {
     sendInvite: "Bu dəvətnaməni göndərin",
     open: "Açın",
     results: "Nəticələr",
-    whereToSee: "Qonaqların cavablarını harada görmək olar",
+    whereToSee: "Qonaqların cavabları",
     whoIsComing: "Kim gəlir?",
     viewPreview: "Önbaxışa baxmaq",
     changeResponse: "Cavabı dəyişdirin"
