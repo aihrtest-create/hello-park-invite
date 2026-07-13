@@ -45,9 +45,6 @@ const translations = {
     kidsPlural: "детей",
     adultSingle: "взрослый",
     adultsPlural: "взрослых",
-    minAgo: "мин назад",
-    hrAgo: "ч назад",
-    daysAgo: "дн назад",
   },
   en: {
     notFoundTitle: "Link not found",
@@ -73,9 +70,6 @@ const translations = {
     kidsPlural: "kids",
     adultSingle: "adult",
     adultsPlural: "adults",
-    minAgo: "min ago",
-    hrAgo: "hr ago",
-    daysAgo: "days ago",
   },
   ar: {
     notFoundTitle: "الرابط غير موجود",
@@ -87,13 +81,13 @@ const translations = {
     copied: "تم النسخ",
     totalComing: "إجمالي الحضور",
     kids: "الأطفال",
-    adults: "البالغين",
+    adults: "الكبار",
     cantCome: "لن يحضروا",
     declines: "المعتذرين",
     syncBadge: "تمت مزامنة البيانات مع هيلو بارك",
-    responsesList: "إجابات الضيوف",
-    responsesCount: "إجابات",
-    noResponsesYet: "لا توجد إجابات بعد",
+    responsesList: "ردود الضيوف",
+    responsesCount: "ردود",
+    noResponsesYet: "لا توجد ردود بعد",
     sendLinkToCollect: "أرسل الرابط للضيوف لجمع التأكيدات",
     coming: "سيحضر",
     notComing: "لن يحضر",
@@ -101,14 +95,11 @@ const translations = {
     kidsPlural: "أطفال",
     adultSingle: "بالغ",
     adultsPlural: "بالغين",
-    minAgo: "دقيقة مضت",
-    hrAgo: "ساعة مضت",
-    daysAgo: "أيام مضت",
   },
   es: {
     notFoundTitle: "Enlace no encontrado",
     notFoundDesc: "Asegúrate de haber utilizado el enlace correcto.",
-    headerTitle: "Panel del Organizador",
+    headerTitle: "Panel del organizador",
     guestLinkTitle: "Enlace para invitados",
     guestLinkDesc: "Copia y envía a tus amigos",
     copyLink: "Copiar enlace",
@@ -117,21 +108,18 @@ const translations = {
     kids: "Niños",
     adults: "Adultos",
     cantCome: "No asistirán",
-    declines: "Rechazados",
+    declines: "Rechazos",
     syncBadge: "Sincronizado con Hello Park",
     responsesList: "Respuestas",
     responsesCount: "respuestas",
     noResponsesYet: "Aún no hay respuestas",
     sendLinkToCollect: "Envía el enlace para recoger confirmaciones",
-    coming: "ASISTIRÁ",
-    notComing: "NO ASISTIRÁ",
+    coming: "Asistirán",
+    notComing: "No asistirán",
     kidSingle: "niño",
     kidsPlural: "niños",
     adultSingle: "adulto",
     adultsPlural: "adultos",
-    minAgo: "hace min",
-    hrAgo: "hace h",
-    daysAgo: "hace días",
   },
   az: {
     notFoundTitle: "Link tapılmadı",
@@ -157,9 +145,6 @@ const translations = {
     kidsPlural: "uşaq",
     adultSingle: "böyük",
     adultsPlural: "böyük",
-    minAgo: "dəq. əvvəl",
-    hrAgo: "saat əvvəl",
-    daysAgo: "gün əvvəl",
   }
 };
 
@@ -291,11 +276,12 @@ export default function InvitationDashboard() {
 
   const formatTimeAgo = (dateStr: string) => {
     const diff = new Date().getTime() - new Date(dateStr).getTime() + (new Date().getTimezoneOffset() * 60000);
+    const rtf = new Intl.RelativeTimeFormat(lang, { numeric: "always", style: "short" });
     const minutes = Math.floor(diff / 60000);
-    if (minutes < 60) return `${Math.max(1, minutes)} ${t.minAgo}`;
+    if (minutes < 60) return rtf.format(-Math.max(1, minutes), "minute");
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} ${t.hrAgo}`;
-    return `${Math.floor(hours / 24)} ${t.daysAgo}`;
+    if (hours < 24) return rtf.format(-hours, "hour");
+    return rtf.format(-Math.floor(hours / 24), "day");
   };
 
   const isRtl = lang === "ar";
