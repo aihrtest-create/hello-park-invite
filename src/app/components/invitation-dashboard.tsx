@@ -161,17 +161,55 @@ export default function InvitationDashboard() {
   const fetchDashboardData = async (id: string) => {
     try {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
-      const [statsRes, rsvpsRes] = await Promise.all([
-        fetch(`${apiBaseUrl}/api/rsvps/${id}/stats`),
-        fetch(`${apiBaseUrl}/api/rsvps/${id}`)
-      ]);
       
-      if (statsRes.ok && rsvpsRes.ok) {
-        const statsData = await statsRes.json();
-        const rsvpsData = await rsvpsRes.json();
-        setStats(statsData);
-        setRsvps(rsvpsData);
+      let rsvpsData: RsvpEntry[] = [];
+      let statsData: RsvpStats | null = null;
+      
+      try {
+        const [statsRes, rsvpsRes] = await Promise.all([
+          fetch(`${apiBaseUrl}/api/rsvps/${id}/stats`),
+          fetch(`${apiBaseUrl}/api/rsvps/${id}`)
+        ]);
+        
+        if (statsRes.ok && rsvpsRes.ok) {
+          statsData = await statsRes.json();
+          rsvpsData = await rsvpsRes.json();
+        } else {
+          throw new Error("API not ok");
+        }
+      } catch (fetchError) {
+        console.log("Local API not running or failed, falling back to localStorage");
+        const key = `hp_rsvps_${id}`;
+        rsvpsData = JSON.parse(localStorage.getItem(key) || "[]");
+        
+        // Compute stats from local data
+        let total_coming = 0;
+        let total_not_coming = 0;
+        let total_kids = 0;
+        let total_adults = 0;
+        
+        rsvpsData.forEach((r: any) => {
+          if (r.status === "yes") {
+            total_coming++;
+            total_kids += r.kids_count || 0;
+            total_adults += r.adults_count || 0;
+          } else {
+            total_not_coming++;
+          }
+        });
+        
+        statsData = {
+          total_responses: rsvpsData.length,
+          total_coming,
+          total_not_coming,
+          total_kids,
+          total_adults
+        };
       }
+      
+      if (statsData) setStats(statsData);
+      setRsvps(rsvpsData);
+      
     } catch (e) {
       console.error("Failed to load dashboard data", e);
     } finally {
@@ -181,12 +219,7 @@ export default function InvitationDashboard() {
 
   const handleCopyLink = () => {
     const origin = window.location.origin;
-    let basePath = window.location.pathname;
-    basePath = basePath.replace(/\/(invite|invite-dashboard|dashboard|index)\.html$/, "/");
-    if (!basePath.endsWith("/")) basePath += "/";
-    
-    const filename = lang === "en" ? "invite-en.html" : lang === "ar" ? "invite-ar.html" : "invite.html";
-    const guestLink = `${origin}${basePath}${filename}?invite=${eventId}`;
+    const guestLink = `${origin}/invite?invite=${eventId}`;
     
     navigator.clipboard.writeText(guestLink);
     setIsCopied(true);

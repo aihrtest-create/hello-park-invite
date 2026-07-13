@@ -23,8 +23,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & Interfaces
 // ─────────────────────────────────────────────────────────────────────────────
-type Language = "ru" | "en" | "ar";
-type TemplateId = "neon"; 
+type Language = "ru" | "en" | "ar" | "es" | "az"; 
 
 interface InvitationData {
   lang: Language;
@@ -32,7 +31,7 @@ interface InvitationData {
   name: string;
   date: string;
   gatheringTime: string;
-  location: string; // Storing the selected park ID (e.g., "mega_khimki")
+  location: string; // Storing the selected park ID (e.g., "mega")
   emoji: string;
 }
 
@@ -40,67 +39,22 @@ interface ParkInfo {
   id: string;
   nameRu: string;
   nameEn: string;
-  nameAr: string;
+  nameAr?: string;
+  nameEs?: string;
+  nameAz?: string;
   addressRu: string;
   addressEn: string;
-  addressAr: string;
+  addressAr?: string;
+  addressEs?: string;
+  addressAz?: string;
   mapUrl: string;
+  supportedLangs: Language[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Static Park Data & Mapping
 // ─────────────────────────────────────────────────────────────────────────────
 const helloParks: ParkInfo[] = [
-  {
-    id: "mega_khimki",
-    nameRu: "Hello Park ТРЦ МЕГА Химки",
-    nameEn: "Hello Park Mega Khimki",
-    nameAr: "هلو بارك ميجا خيمكي",
-    addressRu: "Московская обл., г. Химки, микрорайон ИКЕА, к2, ТРЦ МЕГА Химки",
-    addressEn: "Moscow region, Khimki, IKEA microdistrict, bld. 2, Mega Khimki Mall",
-    addressAr: "منطقة موسكو، خيمكي، حي إيكيا، مبنى 2، مول ميجا خيمكي",
-    mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Khimki"
-  },
-  {
-    id: "mega_teply_stan",
-    nameRu: "Hello Park ТРЦ МЕГА Теплый Стан",
-    nameEn: "Hello Park Mega Teply Stan",
-    nameAr: "هلو بارك ميجا تيبلي ستان",
-    addressRu: "г. Москва, п. Сосенское, Калужское ш., 21-й км, ТРЦ МЕГА Теплый Стан",
-    addressEn: "Moscow, Sosenskoye, Kaluzhskoye sh., 21st km, Mega Teply Stan Mall",
-    addressAr: "موسكو، سوسنسكوي، طريق كالوجسكويه، الكيلومتر 21، مول ميجا تيبلي ستان",
-    mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Teply+Stan"
-  },
-  {
-    id: "mega_belaya_dacha",
-    nameRu: "Hello Park ТРЦ МЕГА Белая Дача",
-    nameEn: "Hello Park Mega Belaya Dacha",
-    nameAr: "هلو بارك ميجا بيلايا دатشا",
-    addressRu: "Московская обл., г. Котельники, 1-й Покровский пр-д, 5, ТРЦ МЕГА Белая Дача",
-    addressEn: "Moscow region, Kotelniki, 1st Pokrovsky pr-d, 5, Mega Belaya Dacha Mall",
-    addressAr: "منطقة موسكو، كوتيلنيكي، ممر بوكروفسكي الأول، 5، مول ميجا بيلايا داتشا",
-    mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Belaya+Dacha"
-  },
-  {
-    id: "mega_dybenko",
-    nameRu: "Hello Park ТРЦ МЕГА Дыбенко",
-    nameEn: "Hello Park Mega Dybenko",
-    nameAr: "هلو بارك ميجا ديبينكو",
-    addressRu: "Ленинградская обл., Всеволожский р-н, Мурманское ш., 12-й км, ТРЦ МЕГА Дыбенко",
-    addressEn: "Leningrad region, Vsevolozhsky district, Murmanskoye sh., 12th km, Mega Dybenko Mall",
-    addressAr: "منطقة لينينغراد، فسيفولوزسكي، طريق مورمانسكويه، الكيلومتر 12، مول ميجا ديبينكو",
-    mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Dybenko"
-  },
-  {
-    id: "avenue_north",
-    nameRu: "Hello Park ТЦ Авеню-Север",
-    nameEn: "Hello Park Avenue-Sever",
-    nameAr: "هلو بارك أفينيو سيفير",
-    addressRu: "Москва, Коровинское шоссе, дом 2, ТЦ Авеню-Север, 3 этаж.",
-    addressEn: "Moscow, Korovinskoye shosse, 2, Avenue-Sever Mall, 3rd floor.",
-    addressAr: "موسكو، كوروفينسكوي شوسيه، 2، مول أفينيو سيفير، الطابق 3",
-    mapUrl: "https://yandex.com.tr/maps/-/CTqSYKP3"
-  },
   {
     id: "oman",
     nameRu: "Hello Park Oman",
@@ -109,7 +63,131 @@ const helloParks: ParkInfo[] = [
     addressRu: "Active Oman, Маскат, Оман",
     addressEn: "Active Oman, Muscat, Oman",
     addressAr: "أكتيف عمان، مسقط، عمان",
-    mapUrl: "https://www.google.com/maps/place/Active+Oman+Center+%D8%A3%D9%83%D8%AA%D9%8A%D9%81+%D8%B9%D9%85%D8%A7%D9%86+%D8%B3%D9%86%D8%AA%D8%B1%E2%80%AD/@23.5837078,58.3211374,892m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e8e01005d35b3b5:0xd13ff9bc88749617!8m2!3d23.5837078!4d58.3211374!16s%2Fg%2F11x7cs6565!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D"
+    mapUrl: "https://maps.app.goo.gl/oCpR9Eyf7k2rZFEm9?g_st=atm",
+    supportedLangs: ["ar", "en", "ru"]
+  },
+  {
+    id: "dubai",
+    nameRu: "Hello Park Дубай",
+    nameEn: "Hello Park Dubai",
+    addressRu: "ТРЦ Dubai Festival City Mall, 1-й этаж, Crescent Rd - Al Kheeran",
+    addressEn: "Dubai Festival City Mall - 1st floor Crescent Rd - Al Kheeran",
+    mapUrl: "https://maps.app.goo.gl/YCRsN6Hjizgosb6u5",
+    supportedLangs: ["en", "ru"]
+  },
+  {
+    id: "bogota_nuestro",
+    nameEn: "Hello Park Bogota Nuestro",
+    nameEs: "Hello Park Bogotá Nuestro",
+    nameRu: "Hello Park Богота Nuestro",
+    addressEn: "Centro Comercial Nuestro Bogotá, 3rd floor, Av Cra 86 #55A -75",
+    addressEs: "Centro Comercial Nuestro Bogotá. Piso 3. Av Cra 86 #55A -75.",
+    addressRu: "ТЦ Nuestro Bogotá, 3 этаж, Av Cra 86 #55A -75",
+    mapUrl: "https://maps.app.goo.gl/xzfguEnQwuCVEvk7A",
+    supportedLangs: ["en", "es"]
+  },
+  {
+    id: "bogota_plaza_central",
+    nameEn: "Hello Park Bogota Plaza Central",
+    nameEs: "Hello Park Bogotá Plaza Central",
+    nameRu: "Hello Park Богота Plaza Central",
+    addressEn: "Centro Comercial Plaza Central, 2nd floor, Local 228, Cra 65 #11-50, Bogotá",
+    addressEs: "Centro Comercial Plaza Central. Piso 2, Local 228. Cra 65 #11-50, Bogotá.",
+    addressRu: "ТЦ Plaza Central, 2 этаж, павильон 228, Cra 65 #11-50, Богота",
+    mapUrl: "https://maps.app.goo.gl/CfL5ctL8RXYrfdkK6",
+    supportedLangs: ["en", "es"]
+  },
+  {
+    id: "baku",
+    nameRu: "Hello Park Баку",
+    nameEn: "Hello Park Baku",
+    nameAz: "Hello Park Bakı",
+    addressRu: "Проспект Нефтчиляр, 68, Баку",
+    addressEn: "Neftchilar Avenue 68, Baku",
+    addressAz: "Neftçilər prospekti, 68, Bakı",
+    mapUrl: "https://maps.app.goo.gl/qnR2cJcvPsCZjiHt5",
+    supportedLangs: ["ru", "en", "az"]
+  },
+  {
+    id: "sakhalin",
+    nameRu: "Hello Park Южно-Сахалинск",
+    nameEn: "Hello Park Yuzhno-Sakhalinsk",
+    addressRu: "Южно-Сахалинск, ул. 2-я Центральная, д. 1Б, ТРК \"Сити Молл\", 5 этаж",
+    addressEn: "Yuzhno-Sakhalinsk, 2-ya Tsentralnaya St., 1B, City Mall, 5th floor",
+    mapUrl: "https://yandex.com/maps/-/CPTonK8O",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "vladikavkaz",
+    nameRu: "Hello Park Владикавказ",
+    nameEn: "Hello Park Vladikavkaz",
+    addressRu: "г. Владикавказ, ул. Цоколева, 14А",
+    addressEn: "Vladikavkaz, Tsolekova St. 14A",
+    mapUrl: "https://yandex.com/maps/-/CPTov8ik",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "sochi",
+    nameRu: "Hello Park Сочи",
+    nameEn: "Hello Park Sochi",
+    addressRu: "г. Сочи, ул. Новая Заря, д. 7, ТРЦ МореМолл, 2 этаж",
+    addressEn: "Sochi, Novaya Zarya St. 7, MoreMall, 2nd floor",
+    mapUrl: "https://yandex.com/maps/-/CPTonJ5w",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "aviapark",
+    nameRu: "Hello Park ТРЦ Авиапарк",
+    nameEn: "Hello Park Aviapark",
+    addressRu: "Москва, Ходынский бульвар, 4, ТРЦ Авиапарк, 3 этаж, жёлтая зона",
+    addressEn: "Moscow, Khodynsky Boulevard 4, Aviapark Mall, 3rd floor, yellow zone",
+    mapUrl: "https://yandex.com/maps/-/CPTo6E2f",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "atyrau",
+    nameRu: "Hello Park Атырау",
+    nameEn: "Hello Park Atyrau",
+    addressRu: "Атырау, ТРЦ Baizaar, улица Бактыгерея Кулманова, 111а, 3 этаж",
+    addressEn: "Atyrau, Baizaar Mall, Baktygereya Kulmanova St 111a, 3rd floor",
+    mapUrl: "https://go.2gis.com/G8wUO",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "kaspiysk",
+    nameRu: "Hello Park Каспийск",
+    nameEn: "Hello Park Kaspiysk",
+    addressRu: "г. Каспийск, ул. Амет-хана Султана, 28",
+    addressEn: "Kaspiysk, Amet-Khan Sultana St 28",
+    mapUrl: "https://yandex.com/maps/-/CPTofP1L",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "seligerskaya",
+    nameRu: "Hello Park Селигерская",
+    nameEn: "Hello Park Seligerskaya",
+    addressRu: "Москва, ТРЦ \"Avenue Sever\", Коровинское ш., 2, 3 этаж",
+    addressEn: "Moscow, Avenue Sever Mall, Korovinskoye shosse 2, 3rd floor",
+    mapUrl: "https://yandex.com/maps/-/CPTo6R0S",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "mega",
+    nameRu: "Hello Park МЕГА",
+    nameEn: "Hello Park Mega",
+    addressRu: "ТЦ МЕГА Теплый стан, Калужское шоссе 21 км, детская галерея, 2 этаж",
+    addressEn: "Mega Teply Stan Mall, Kaluzhskoye shosse 21st km, children's gallery, 2nd floor",
+    mapUrl: "https://yandex.com/maps/-/CPTobMpI",
+    supportedLangs: ["ru", "en"]
+  },
+  {
+    id: "riviera",
+    nameRu: "Hello Park ТРЦ Ривьера",
+    nameEn: "Hello Park Riviera",
+    addressRu: "Москва, ТРЦ \"Ривьера\", Автозаводская ул., 18, 3 этаж со стороны Ашана",
+    addressEn: "Moscow, Riviera Mall, Avtozavodskaya St 18, 3rd floor (near Auchan)",
+    mapUrl: "https://yandex.com/maps/-/CPTo685J",
+    supportedLangs: ["ru", "en"]
   }
 ];
 
@@ -163,7 +241,15 @@ const translations = {
     calendarChoiceTitle: "Добавить в календарь",
     googleCalendarBtn: "Google Календарь",
     appleCalendarBtn: "Apple / System (.ICS)",
-    closeBtn: "Закрыть"
+    closeBtn: "Закрыть",
+    forGuests: "Гостям",
+    sendInvite: "Отправьте это приглашение",
+    open: "Открыть",
+    results: "Результаты",
+    whereToSee: "Где смотреть ответы гостей",
+    whoIsComing: "Кто придет?",
+    viewPreview: "Посмотреть превью",
+    changeResponse: "Изменить выбор"
   },
   en: {
     title: "Invitation Creator",
@@ -211,7 +297,15 @@ const translations = {
     calendarChoiceTitle: "Add to Calendar",
     googleCalendarBtn: "Google Calendar",
     appleCalendarBtn: "Apple / System (.ICS)",
-    closeBtn: "Close"
+    closeBtn: "Close",
+    forGuests: "For Guests",
+    sendInvite: "Send this invitation",
+    open: "Open",
+    results: "Results",
+    whereToSee: "Where to see guest answers",
+    whoIsComing: "Who is coming?",
+    viewPreview: "View Preview",
+    changeResponse: "Change response"
   },
   ar: {
     title: "صانع الدعوات",
@@ -257,12 +351,131 @@ const translations = {
     parkAddressLabel: "عنوان الحفل:",
     openInMapsBtn: "فتح في الخرائط",
     calendarChoiceTitle: "إضافة إلى التقويم",
-    googleCalendarBtn: "تقويم Google",
-    appleCalendarBtn: "تقويم Apple / System (.ICS)",
-    closeBtn: "إغلاق"
+    googleCalendarBtn: "إضافة إلى تقويم Google",
+    appleCalendarBtn: "إضافة إلى تقويم Apple",
+    closeBtn: "إغلاق",
+    forGuests: "للضيوف",
+    sendInvite: "أرسل هذه الدعوة",
+    open: "فتح",
+    results: "النتائج",
+    whereToSee: "أين ترى إجابات الضيوف",
+    whoIsComing: "من سيأتي؟",
+    viewPreview: "عرض معاينة",
+    changeResponse: "تغيير الإجابة"
+  },
+  es: {
+    title: "Creador de Invitaciones",
+    subtitle: "Crea una invitación interactiva a Hello Park",
+    selectLang: "Idioma de la invitación",
+    childName: "Nombre del cumpleañero",
+    childNamePlaceholder: "Ej: Mateo",
+    date: "Fecha del evento",
+    gatheringTime: "Hora de reunión",
+    selectEmoji: "Elige un emoji",
+    selectPark: "Elige la ubicación",
+    generate: "Crear invitación",
+    readyTitle: "¡Invitación lista! 🎉",
+    readyDesc: "Copia el enlace y envíalo a tus invitados:",
+    copyLink: "Copiar enlace",
+    copied: "¡Enlace copiado! 📋",
+    shareWa: "WhatsApp",
+    shareTg: "Telegram",
+    openEnvelope: "Toca el sobre para abrirlo",
+    backToEnvelope: "Guardar en el sobre",
+    guestWillSee: "Vista previa de la invitación:",
+    rsvpTitle: "¿Asistirás a la fiesta?",
+    rsvpYes: "Sí, iré",
+    rsvpNo: "No podré ir",
+    rsvpYesToast: "¡Nos vemos allí! 🎉",
+    rsvpNoToast: "¡Qué pena, te extrañaremos! 🥺",
+    rsvpFormTitle: "Tu nombre / familia",
+    rsvpNamePlaceholder: "Ej: Familia García",
+    rsvpKids: "Niños",
+    rsvpAdults: "Adultos",
+    rsvpConfirm: "Confirmar asistencia",
+    locationPreset: "Hello Park, Centro Comercial",
+    calendarTitle: "Fiesta de cumpleaños en Hello Park",
+    calendarDesc: "¡Celebramos un cumpleaños! ¡Te esperamos!",
+    addToCalendar: "Calendario",
+    openMap: "Dirección",
+    tapEnvelopeLabel: "¡Te han enviado una invitación!",
+    creatorLink: "Crear mi propia invitación",
+    gatheringLabel: "Hora de reunión",
+    demoBtn: "Ver ejemplo",
+    backToConfig: "Volver a la edición",
+    parkInfoTitle: "Información del parque",
+    parkAddressLabel: "Dirección del parque:",
+    openInMapsBtn: "Abrir en mapas",
+    calendarChoiceTitle: "Agregar al calendario",
+    googleCalendarBtn: "Google Calendario",
+    appleCalendarBtn: "Apple / Sistema (.ICS)",
+    closeBtn: "Cerrar",
+    forGuests: "Para Invitados",
+    sendInvite: "Envía esta invitación",
+    open: "Abrir",
+    results: "Resultados",
+    whereToSee: "Dónde ver las respuestas de los invitados",
+    whoIsComing: "¿Quién viene?",
+    viewPreview: "Ver vista previa",
+    changeResponse: "Cambiar respuesta"
+  },
+  az: {
+    title: "Dəvətnamə Yaradıcı",
+    subtitle: "Hello Park-a interaktiv dəvətnamə yaradın",
+    selectLang: "Dəvətnamə dili",
+    childName: "Ad günü olanın adı",
+    childNamePlaceholder: "Məsələn: Əli",
+    date: "Tədbirin tarixi",
+    gatheringTime: "Qonaqların toplanması",
+    selectEmoji: "Emozi seçin",
+    selectPark: "Parkı seçin",
+    generate: "Dəvətnamə yarat",
+    readyTitle: "Dəvətnamə hazırdır! 🎉",
+    readyDesc: "Linki kopyalayın və qonaqlara göndərin:",
+    copyLink: "Linki kopyala",
+    copied: "Link kopyalandı! 📋",
+    shareWa: "WhatsApp",
+    shareTg: "Telegram",
+    openEnvelope: "Açmaq üçün zərfə toxunun",
+    backToEnvelope: "Zərfə geri qoy",
+    guestWillSee: "Dəvətnamənin önbaxışı:",
+    rsvpTitle: "Bayrama gələcəksiniz?",
+    rsvpYes: "Gələcəyik",
+    rsvpNo: "Gələ bilməyəcəyik",
+    rsvpYesToast: "Görüşənədək! 🎉",
+    rsvpNoToast: "Təəssüf, sizin üçün darıxacağıq! 🥺",
+    rsvpFormTitle: "Adınız / Ailəniz",
+    rsvpNamePlaceholder: "Məsələn: Əliyevlər Ailəsi",
+    rsvpKids: "Uşaq",
+    rsvpAdults: "Böyük",
+    rsvpConfirm: "Təsdiqləyin",
+    locationPreset: "Hello Park, Ticarət Mərkəzi",
+    calendarTitle: "Hello Park-da Ad Günü",
+    calendarDesc: "Ad gününü qeyd edirik! Sizi gözləyirik!",
+    addToCalendar: "Təqvim",
+    openMap: "Ünvan",
+    tapEnvelopeLabel: "Sizə dəvətnamə göndərilib!",
+    creatorLink: "Öz dəvətnaməni yarat",
+    gatheringLabel: "Qonaqların toplanması",
+    demoBtn: "Nümunəyə baxmaq",
+    backToConfig: "Yaratmağa geri qayıt",
+    parkInfoTitle: "Park haqqında məlumat",
+    parkAddressLabel: "Parkın ünvanı:",
+    openInMapsBtn: "Xəritədə açın",
+    calendarChoiceTitle: "Təqvimə əlavə et",
+    googleCalendarBtn: "Google Təqvim",
+    appleCalendarBtn: "Apple / Sistem (.ICS)",
+    closeBtn: "Bağla",
+    forGuests: "Qonaqlar üçün",
+    sendInvite: "Bu dəvətnaməni göndərin",
+    open: "Açın",
+    results: "Nəticələr",
+    whereToSee: "Qonaqların cavablarını harada görmək olar",
+    whoIsComing: "Kim gəlir?",
+    viewPreview: "Önbaxışa baxmaq",
+    changeResponse: "Cavabı dəyişdirin"
   }
 };
-
 const emojiOptions = ["🎉", "🎂", "🎈", "🎁", "🚀", "🦊", "👾", "🦖", "🦄", "👑", "🍕", "🧁"];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -313,7 +526,39 @@ const getShareMessage = (name: string, lang: Language, link: string) => {
   if (lang === "ar") {
     return `${name} يدعوكم لحفل عيد ميلاده في هلو بارك! افتح المغلف السحري: ${link}`;
   }
+  if (lang === "es") {
+    return `${name} te invita a su fiesta de cumpleaños en Hello Park. Abre el sobre mágico: ${link}`;
+  }
+  if (lang === "az") {
+    return `${name} sizi Hello Park-dakı ad günü şənliyinə dəvət edir! Sehrli zərfi açın: ${link}`;
+  }
   return `${name} приглашает вас на свой День Рождения в Hello Park! Открой волшебный конверт: ${link}`;
+};
+
+const getParkName = (park: ParkInfo, lang: Language): string => {
+  if (lang === "ru") return park.nameRu;
+  if (lang === "en") return park.nameEn;
+  if (lang === "ar") return park.nameAr || park.nameEn;
+  if (lang === "es") return park.nameEs || park.nameEn;
+  if (lang === "az") return park.nameAz || park.nameRu || park.nameEn;
+  return park.nameEn;
+};
+
+const getParkAddress = (park: ParkInfo, lang: Language): string => {
+  if (lang === "ru") return park.addressRu;
+  if (lang === "en") return park.addressEn;
+  if (lang === "ar") return park.addressAr || park.addressEn;
+  if (lang === "es") return park.addressEs || park.addressEn;
+  if (lang === "az") return park.addressAz || park.addressRu || park.addressEn;
+  return park.addressEn;
+};
+
+const getLangLocale = (lang: Language): string => {
+  if (lang === "ru") return "ru-RU";
+  if (lang === "ar") return "ar-AE";
+  if (lang === "es") return "es-ES";
+  if (lang === "az") return "az-AZ";
+  return "en-US";
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -321,29 +566,17 @@ const getShareMessage = (name: string, lang: Language, link: string) => {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function InvitationService() {
   // Configurator form state
-  const [formData, setFormData] = useState<InvitationData>(() => {
-    let initialLang: Language = "ru";
-    try {
-      if (typeof window !== "undefined") {
-        const savedLang = localStorage.getItem("hello_park_invitation_lang");
-        if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar")) {
-          initialLang = savedLang as Language;
-        }
-      }
-    } catch (e) {
-      console.error("Local storage error:", e);
-    }
-
-    return {
-      lang: initialLang,
-      template: "neon",
-      name: "",
-      date: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0],
-      gatheringTime: "15:00",
-      location: initialLang === "ar" ? "oman" : "mega_khimki",
-      emoji: "🎉"
-    };
+  const [formData, setFormData] = useState<InvitationData>({
+    lang: "ru",
+    template: "neon",
+    name: "",
+    date: "",
+    gatheringTime: "15:00",
+    location: "mega",
+    emoji: "🎉"
   });
+
+  const [mounted, setMounted] = useState<boolean>(false);
 
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [generatedLink, setGeneratedLink] = useState<string>("");
@@ -363,8 +596,70 @@ export default function InvitationService() {
   const [showLocationPopup, setShowLocationPopup] = useState<boolean>(false);
   const [showCalendarPopup, setShowCalendarPopup] = useState<boolean>(false);
 
-  // Load language from cache or detect URL parameter
+  // Hydration-safe initialisation & loading language from cache/detect URL parameter
   useEffect(() => {
+    setMounted(true);
+    
+    let initialLang: Language = "ru";
+    let initialLocation = "mega";
+    let initialDate = new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0];
+
+    try {
+      if (typeof window !== "undefined") {
+        // 1. URL parameter check for park
+        const searchParams = new URLSearchParams(window.location.search);
+        const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
+        
+        const parkParam = searchParams.get("park") || hashParams.get("park");
+        if (parkParam && helloParks.some(p => p.id === parkParam)) {
+          initialLocation = parkParam;
+          localStorage.setItem("hello_park_invitation_location", parkParam);
+        } else {
+          // 2. Local storage check for park
+          const savedLocation = localStorage.getItem("hello_park_invitation_location");
+          if (savedLocation && helloParks.some(p => p.id === savedLocation)) {
+            initialLocation = savedLocation;
+          }
+        }
+
+        // 3. Language check (either URL parameter, or localStorage, or default for park)
+        const langParam = searchParams.get("lang") || hashParams.get("lang");
+        const selectedPark = helloParks.find(p => p.id === initialLocation) || helloParks[0];
+        const supported = selectedPark.supportedLangs;
+        
+        if (langParam && (langParam === "ru" || langParam === "en" || langParam === "ar" || langParam === "es" || langParam === "az")) {
+          if (supported.includes(langParam as Language)) {
+            initialLang = langParam as Language;
+          } else {
+            initialLang = supported[0];
+          }
+        } else {
+          const savedLang = localStorage.getItem("hello_park_invitation_lang");
+          if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar" || savedLang === "es" || savedLang === "az")) {
+            if (supported.includes(savedLang as Language)) {
+              initialLang = savedLang as Language;
+            } else {
+              initialLang = supported[0];
+            }
+          } else {
+            initialLang = supported[0];
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Initialization error:", e);
+    }
+
+    setFormData({
+      lang: initialLang,
+      template: "neon",
+      name: "",
+      date: initialDate,
+      gatheringTime: "15:00",
+      location: initialLocation,
+      emoji: "🎉"
+    });
+
     const searchParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
     const inviteKey = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
@@ -380,14 +675,38 @@ export default function InvitationService() {
   const handleLangChange = (lang: Language) => {
     setFormData(prev => ({ 
       ...prev, 
-      lang,
-      location: lang === "ar" ? "oman" : (prev.location === "oman" ? "mega_khimki" : prev.location)
+      lang
     }));
     try {
       localStorage.setItem("hello_park_invitation_lang", lang);
     } catch (e) {
       console.error("Failed to save language choice:", e);
     }
+  };
+
+  const handleParkChange = (parkId: string) => {
+    const selectedPark = helloParks.find(p => p.id === parkId);
+    if (!selectedPark) return;
+
+    setFormData(prev => {
+      let nextLang = prev.lang;
+      if (!selectedPark.supportedLangs.includes(nextLang)) {
+        nextLang = selectedPark.supportedLangs[0];
+      }
+      
+      try {
+        localStorage.setItem("hello_park_invitation_location", parkId);
+        localStorage.setItem("hello_park_invitation_lang", nextLang);
+      } catch (e) {
+        console.error("Failed to save location/language choice:", e);
+      }
+
+      return {
+        ...prev,
+        location: parkId,
+        lang: nextLang
+      };
+    });
   };
 
   // Sound chord synthesizer
@@ -416,6 +735,8 @@ export default function InvitationService() {
 
   const monthsShortRu = ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
   const monthsShortEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthsShortEs = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const monthsShortAz = ["yan", "fev", "mar", "apr", "may", "iyn", "iyl", "avq", "sen", "okt", "noy", "dek"];
 
   // Format date elegantly depending on locale
   const getFormattedDate = (dateStr: string, locale: Language) => {
@@ -447,6 +768,12 @@ export default function InvitationService() {
       }
       if (locale === "en") {
         return `${monthsShortEn[m - 1] || ""} ${d}, ${y}`;
+      }
+      if (locale === "es") {
+        return `${d} de ${monthsShortEs[m - 1] || ""} ${y}`;
+      }
+      if (locale === "az") {
+        return `${d} ${monthsShortAz[m - 1] || ""} ${y}`;
       }
       if (locale === "ar") {
         const date = new Date(y, m - 1, d);
@@ -484,18 +811,30 @@ export default function InvitationService() {
       const event_id = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
       
       if (event_id) {
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
-        await fetch(`${apiBaseUrl}/api/rsvps`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event_id,
-            guest_name: status === "no" ? "Отклонено гостем" : guestName,
-            kids_count: status === "no" ? 0 : kidsCount,
-            adults_count: status === "no" ? 0 : adultsCount,
-            status
-          })
-        });
+        const payload = {
+          event_id,
+          guest_name: status === "no" ? "Отклонено гостем" : guestName,
+          kids_count: status === "no" ? 0 : kidsCount,
+          adults_count: status === "no" ? 0 : adultsCount,
+          status,
+          created_at: new Date().toISOString(),
+          id: Date.now()
+        };
+
+        try {
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
+          await fetch(`${apiBaseUrl}/api/rsvps`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (fetchError) {
+          console.log("Local API not running, falling back to localStorage");
+          const key = `hp_rsvps_${event_id}`;
+          const existing = JSON.parse(localStorage.getItem(key) || "[]");
+          existing.push(payload);
+          localStorage.setItem(key, JSON.stringify(existing));
+        }
       }
     } catch (e) {
       console.error("Failed to save RSVP:", e);
@@ -517,7 +856,7 @@ export default function InvitationService() {
     
     // Determine the base path.
     // E.g., if pathname is "/mega/invite", "/mega/index.html", "/mega/invite-en.html", etc.
-    const link = `${window.location.origin}/?invite=${hash}`;
+    const link = `${window.location.origin}/invite?invite=${hash}`;
     
     setGeneratedLink(link);
     setIsSubmitting(false);
@@ -585,8 +924,8 @@ export default function InvitationService() {
     if (endHour >= 24) endHour = 23;
     const endTimeStr = `${String(endHour).padStart(2, '0')}${String(startMin).padStart(2, '0')}00`;
 
-    const locationName = park ? (formData.lang === "ru" ? park.nameRu : formData.lang === "en" ? park.nameEn : park.nameAr) : "Hello Park";
-    const locationAddr = park ? (formData.lang === "ru" ? park.addressRu : formData.lang === "en" ? park.addressEn : park.addressAr) : "";
+    const locationName = park ? getParkName(park, formData.lang) : "Hello Park";
+    const locationAddr = park ? getParkAddress(park, formData.lang) : "";
 
     const icsContent = [
       "BEGIN:VCALENDAR",
@@ -613,6 +952,14 @@ export default function InvitationService() {
     document.body.removeChild(link);
   };
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#F3F4F6] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-[#FF6022] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // RENDER GUEST VIEW (Immersive Envelope Site)
   // ─────────────────────────────────────────────────────────────────────────────
@@ -625,8 +972,8 @@ export default function InvitationService() {
 
     // Resolve selected park info
     const currentPark = helloParks.find(p => p.id === data.location) || helloParks[0];
-    const parkName = locale === "ru" ? currentPark.nameRu : locale === "en" ? currentPark.nameEn : locale === "ar" ? currentPark.nameAr : currentPark.nameRu;
-    const parkAddress = locale === "ru" ? currentPark.addressRu : locale === "en" ? currentPark.addressEn : locale === "ar" ? currentPark.addressAr : currentPark.addressRu;
+    const parkName = getParkName(currentPark, locale);
+    const parkAddress = getParkAddress(currentPark, locale);
 
     const getCardTitle = () => {
       if (locale === "en") {
@@ -642,6 +989,22 @@ export default function InvitationService() {
           <h2 className="gilroy-text" dir="rtl">
             {data.name} يدعوكم لحفل عيد ميلاده في منتزه المستقبل <br />
             <span className="gilroy-brand">هلو بارك</span>
+          </h2>
+        );
+      }
+      if (locale === "es") {
+        return (
+          <h2 className="gilroy-text">
+            {data.name} te invita a su fiesta de cumpleaños en el parque del futuro <br />
+            <span className="gilroy-brand">Hello Park</span>
+          </h2>
+        );
+      }
+      if (locale === "az") {
+        return (
+          <h2 className="gilroy-text">
+            {data.name} sizi gələcəyin parkındakı ad günü şənliyinə dəvət edir <br />
+            <span className="gilroy-brand">Hello Park</span>
           </h2>
         );
       }
@@ -884,7 +1247,7 @@ export default function InvitationService() {
                       onClick={() => setRsvpState("none")}
                       className="mt-2 text-[10px] text-slate-400 underline font-medium hover:text-slate-600 transition-colors"
                     >
-                      {locale === "en" ? "Change response" : locale === "ar" ? "تغيير الإجابة" : "Изменить выбор"}
+                      {t.changeResponse || "Change response"}
                     </button>
                   </motion.div>
                 )}
@@ -1076,8 +1439,8 @@ export default function InvitationService() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold shrink-0">1</div>
                   <div>
-                    <div className="font-bold text-slate-900">{formData.lang === 'en' ? 'For Guests' : formData.lang === 'ar' ? 'للضيوف' : 'Гостям'}</div>
-                    <div className="text-xs text-slate-500">{formData.lang === 'en' ? 'Send this invitation' : formData.lang === 'ar' ? 'أرسل هذه الدعوة' : 'Отправьте это приглашение'}</div>
+                    <div className="font-bold text-slate-900">{activeTranslation.forGuests}</div>
+                    <div className="text-xs text-slate-500">{activeTranslation.sendInvite}</div>
                   </div>
                 </div>
                 
@@ -1097,7 +1460,7 @@ export default function InvitationService() {
                     rel="noreferrer"
                     className="w-full bg-slate-100 text-slate-700 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-slate-200 transition-colors"
                   >
-                    {formData.lang === 'en' ? 'Open' : formData.lang === 'ar' ? 'فتح' : 'Открыть'}
+                    {activeTranslation.open}
                   </a>
                 </div>
               </div>
@@ -1107,23 +1470,23 @@ export default function InvitationService() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 font-bold shrink-0">2</div>
                   <div>
-                    <div className="font-bold text-slate-900">{formData.lang === 'en' ? 'Results' : formData.lang === 'ar' ? 'النتائج' : 'Результаты'}</div>
-                    <div className="text-xs text-slate-500">{formData.lang === 'en' ? 'Where to see guest answers' : formData.lang === 'ar' ? 'أين ترى إجابات الضيوف' : 'Где смотреть ответы гостей'}</div>
+                    <div className="font-bold text-slate-900">{activeTranslation.results}</div>
+                    <div className="text-xs text-slate-500">{activeTranslation.whereToSee}</div>
                   </div>
                 </div>
                 
                 <div className="flex gap-2">
                   <a 
-                    href={generatedLink.replace('/?invite=', '/dashboard?id=')}
+                    href={generatedLink.replace('/invite?invite=', '/dashboard?id=').replace('/?invite=', '/dashboard?id=')}
                     target="_blank"
                     rel="noreferrer"
                     className="flex-[3] bg-orange-500 text-white rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2 shadow-sm shadow-orange-500/20 hover:bg-orange-600 transition-colors"
                   >
-                    {formData.lang === 'en' ? 'Who is coming?' : formData.lang === 'ar' ? 'من سيأتي؟' : 'Кто придет?'}
+                    {activeTranslation.whoIsComing}
                   </a>
                   <button 
                     onClick={() => {
-                      navigator.clipboard.writeText(generatedLink.replace('/?invite=', '/dashboard?id='));
+                      navigator.clipboard.writeText(generatedLink.replace('/invite?invite=', '/dashboard?id=').replace('/?invite=', '/dashboard?id='));
                       confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
                     }}
                     className="flex-1 bg-orange-50 text-orange-600 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-orange-100 transition-colors"
@@ -1146,7 +1509,7 @@ export default function InvitationService() {
                 className="w-full bg-white text-slate-900 border border-slate-200 rounded-3xl py-4 shadow-sm font-bold text-sm flex justify-center items-center gap-2 hover:bg-slate-50 transition-colors"
               >
                 <Eye className="w-5 h-5 text-slate-400" />
-                {formData.lang === 'en' ? 'View Preview' : formData.lang === 'ar' ? 'عرض معاينة' : 'Посмотреть превью'}
+                {activeTranslation.viewPreview}
               </button>
               
               <button 
@@ -1201,24 +1564,33 @@ export default function InvitationService() {
                 <Globe className="w-3.5 h-3.5 text-orange-500" />
                 {activeTranslation.selectLang}
               </label>
-              <div className="grid grid-cols-3 gap-2 bg-slate-50 p-1 rounded-xl border border-slate-200">
-                {([
-                  { id: "ru" as Language, label: "Рус" },
-                  { id: "en" as Language, label: "Eng" },
-                  { id: "ar" as Language, label: "عرب" }
-                ]).map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleLangChange(item.id)}
-                    className={`py-2 rounded-lg text-xs font-bold transition-all uppercase ${
-                      formData.lang === item.id 
-                        ? "bg-[#FF6022] text-white shadow-md" 
-                        : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+              <div className="flex gap-2 bg-slate-50 p-1 rounded-xl border border-slate-200 w-full">
+                {(() => {
+                  const currentPark = helloParks.find(p => p.id === formData.location) || helloParks[0];
+                  const allLanguages = [
+                    { id: "ru" as Language, label: "Рус" },
+                    { id: "en" as Language, label: "Eng" },
+                    { id: "ar" as Language, label: "عرب" },
+                    { id: "es" as Language, label: "Esp" },
+                    { id: "az" as Language, label: "Aze" }
+                  ];
+                  const filtered = allLanguages.filter(l => currentPark.supportedLangs.includes(l.id));
+                  
+                  return filtered.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleLangChange(item.id)}
+                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all uppercase ${
+                        formData.lang === item.id 
+                          ? "bg-[#FF6022] text-white shadow-md" 
+                          : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ));
+                })()}
               </div>
             </div>
 
@@ -1244,12 +1616,12 @@ export default function InvitationService() {
               </label>
               <select
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                onChange={(e) => handleParkChange(e.target.value)}
                 className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
               >
                 {helloParks.map(park => (
                   <option key={park.id} value={park.id}>
-                    {formData.lang === "ru" ? park.nameRu : formData.lang === "en" ? park.nameEn : park.nameAr}
+                    {getParkName(park, formData.lang)}
                   </option>
                 ))}
               </select>
