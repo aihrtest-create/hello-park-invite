@@ -11,20 +11,21 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Обязательно стягивать всю историю, чтобы пуш прошел успешно
+          fetch-depth: 0
 
       - name: Push to GitLab Mirror
         env:
-          GITLAB_URL: ${{ secrets.GITLAB_MIRROR_URL }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          if [ -z "$GITLAB_URL" ]; then
-            echo "Ошибка: Секрет GITLAB_MIRROR_URL не задан!"
+          if [ -z "$GITLAB_TOKEN" ]; then
+            echo "Ошибка: Секрет GITLAB_TOKEN не задан!"
             exit 1
           fi
           
-          # Добавляем GitLab как удаленный репозиторий
-          git remote add gitlab "$GITLAB_URL"
+          # Автоматически собираем ссылку, предполагая, что в GitLab 
+          # репозиторий называется точно так же, как и на GitHub (например, aihrtest-create/hello-park-invite)
+          TARGET_URL="https://oauth2:${GITLAB_TOKEN}@gitlab.com/${GITHUB_REPOSITORY}.git"
           
-          # Отправляем ветки и теги (принудительно, чтобы зеркало 1 в 1 совпадало с GitHub)
+          git remote add gitlab "$TARGET_URL"
           git push gitlab --all --force
           git push gitlab --tags --force
