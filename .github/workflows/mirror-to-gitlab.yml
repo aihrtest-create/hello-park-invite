@@ -22,9 +22,8 @@ jobs:
             exit 1
           fi
           
-          # Автоматически собираем ссылку, предполагая, что в GitLab 
-          # репозиторий называется точно так же, как и на GitHub (например, aihrtest-create/hello-park-invite)
-          TARGET_URL="https://oauth2:${GITLAB_TOKEN}@gitlab.com/${GITHUB_REPOSITORY}.git"
+          # Явно прописываем путь до репозитория в GitLab
+          TARGET_URL="https://oauth2:${GITLAB_TOKEN}@gitlab.com/hp-tools/hello-park-invite.git"
           
           git remote add gitlab "$TARGET_URL"
           git push gitlab --all --force
