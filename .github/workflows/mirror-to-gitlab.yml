@@ -1,0 +1,30 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Обязательно стягивать всю историю, чтобы пуш прошел успешно
+
+      - name: Push to GitLab Mirror
+        env:
+          GITLAB_URL: ${{ secrets.GITLAB_MIRROR_URL }}
+        run: |
+          if [ -z "$GITLAB_URL" ]; then
+            echo "Ошибка: Секрет GITLAB_MIRROR_URL не задан!"
+            exit 1
+          fi
+          
+          # Добавляем GitLab как удаленный репозиторий
+          git remote add gitlab "$GITLAB_URL"
+          
+          # Отправляем ветки и теги (принудительно, чтобы зеркало 1 в 1 совпадало с GitHub)
+          git push gitlab --all --force
+          git push gitlab --tags --force
