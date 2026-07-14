@@ -3,7 +3,7 @@ const fs = require('fs');
 
 (async () => {
   console.log("Launching browser...");
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const browser = await puppeteer.launch({ headless: 'new', executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
   const page = await browser.newPage();
   
   // Set viewport to mobile to simulate a phone
@@ -31,9 +31,7 @@ const fs = require('fs');
   });
   
   // Wait for ready title
-  await page.waitForFunction(() => {
-    return Array.from(document.querySelectorAll('h2, div, p')).some(el => el.textContent.includes('Приглашение готово!'));
-  }, {timeout: 5000});
+  await new Promise(r => setTimeout(r, 2000));
   
   // 2. Screenshot Ready state
   const s2 = await page.screenshot({ encoding: 'base64' });
@@ -46,10 +44,7 @@ const fs = require('fs');
   });
   
   // Wait for envelope
-  await page.waitForFunction(() => {
-    return document.querySelector('.cursor-pointer') || Array.from(document.querySelectorAll('div')).some(el => el.textContent.includes('TAP'));
-  }, {timeout: 5000});
-  await page.waitForTimeout(1000);
+  await new Promise(r => setTimeout(r, 2000));
   
   // 3. Screenshot Envelope
   const s3 = await page.screenshot({ encoding: 'base64' });
@@ -57,12 +52,13 @@ const fs = require('fs');
   
   // Open envelope
   await page.evaluate(() => {
+    window.confetti = function() {}; // mock confetti
     const envelope = document.querySelector('div[role="button"]') || document.querySelector('.cursor-pointer');
     if (envelope) envelope.click();
   });
   
   // Wait for card animation
-  await page.waitForTimeout(3000);
+  await new Promise(r => setTimeout(r, 3000));
   
   // 4. Screenshot Opened Invitation
   const s4 = await page.screenshot({ encoding: 'base64' });

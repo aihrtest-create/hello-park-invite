@@ -816,7 +816,7 @@ export default function InvitationService() {
     try {
       const searchParams = new URLSearchParams(window.location.search);
       const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
-      const event_id = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
+      const event_id = searchParams.get("id") || hashParams.get("id") || searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
       
       if (event_id) {
         const payload = {
@@ -830,8 +830,7 @@ export default function InvitationService() {
         };
 
         try {
-          const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
-          await fetch(`${apiBaseUrl}/api/rsvps`, {
+          await fetch(`/api/rsvps`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

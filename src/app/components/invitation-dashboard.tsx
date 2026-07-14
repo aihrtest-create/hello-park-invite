@@ -160,7 +160,7 @@ export default function InvitationDashboard() {
     // Extract event ID from URL
     const searchParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
-    const id = searchParams.get("id") || hashParams.get("id");
+    const id = searchParams.get("id") || hashParams.get("id") || searchParams.get("invite") || hashParams.get("invite");
     
     let interval: any;
 
