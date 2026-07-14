@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hello Park — Приглашение на праздник",
-  description: "Интерактивное приглашение на день рождения в Hello Park",
+  title: "Hello Park Invite",
+  description: "Interactive birthday invitation for Hello Park",
   icons: {
     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎈</text></svg>',
   },
