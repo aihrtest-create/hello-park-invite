@@ -205,15 +205,13 @@ export default function InvitationDashboard() {
 
   const fetchDashboardData = async (id: string) => {
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
-      
       let rsvpsData: RsvpEntry[] = [];
       let statsData: RsvpStats | null = null;
       
       try {
         const [statsRes, rsvpsRes] = await Promise.all([
-          fetch(`${apiBaseUrl}/api/rsvps/${id}/stats`),
-          fetch(`${apiBaseUrl}/api/rsvps/${id}`)
+          fetch(`/api/rsvps/${id}/stats`),
+          fetch(`/api/rsvps/${id}`)
         ]);
         
         if (statsRes.ok && rsvpsRes.ok) {

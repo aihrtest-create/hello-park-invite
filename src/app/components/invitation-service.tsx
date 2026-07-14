@@ -663,8 +663,16 @@ export default function InvitationService() {
     const searchParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
     const inviteKey = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
+    const shortId = searchParams.get("id") || hashParams.get("id");
     
-    if (inviteKey) {
+    if (shortId) {
+      fetch(`/api/shorten?id=${shortId}`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && !data.error) setGuestInvite(data);
+        })
+        .catch(console.error);
+    } else if (inviteKey) {
       const decoded = decodeData(inviteKey);
       if (decoded) {
         setGuestInvite(decoded);
@@ -846,21 +854,32 @@ export default function InvitationService() {
   };
 
   // Generate invite link
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setIsSubmitting(true);
     const cleanData: InvitationData = {
       ...formData
     };
 
-    const hash = encodeData(cleanData);
-    
-    // Determine the base path.
-    // E.g., if pathname is "/mega/invite", "/mega/index.html", "/mega/invite-en.html", etc.
-    const basePath = window.location.pathname.startsWith('/hello-park-invite') ? '/hello-park-invite' : '';
-    const link = `${window.location.origin}${basePath}/invite?invite=${hash}`;
-    
-    setGeneratedLink(link);
-    setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cleanData)
+      });
+      
+      if (!response.ok) throw new Error('Failed to generate short link');
+      const { id } = await response.json();
+      
+      const basePath = window.location.pathname.startsWith('/hello-park-invite') ? '/hello-park-invite' : '';
+      const link = `${window.location.origin}${basePath}/invite?id=${id}`;
+      
+      setGeneratedLink(link);
+    } catch (e) {
+      console.error(e);
+      alert('Ошибка при создании приглашения');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Copy raw link ONLY to clipboard (as requested in #2)
@@ -1479,7 +1498,7 @@ export default function InvitationService() {
                 
                 <div className="flex gap-2">
                   <a 
-                    href={generatedLink.replace('/invite?invite=', '/invite-dashboard?id=').replace('/?invite=', '/invite-dashboard?id=')}
+                    href={generatedLink.replace('/invite?id=', '/invite-dashboard?id=').replace('/?id=', '/invite-dashboard?id=').replace('/invite?invite=', '/invite-dashboard?id=').replace('/?invite=', '/invite-dashboard?id=')}
                     target="_blank"
                     rel="noreferrer"
                     className="flex-[3] bg-orange-500 text-white rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2 shadow-sm shadow-orange-500/20 hover:bg-orange-600 transition-colors"
@@ -1488,7 +1507,7 @@ export default function InvitationService() {
                   </a>
                   <button 
                     onClick={() => {
-                      navigator.clipboard.writeText(generatedLink.replace('/invite?invite=', '/invite-dashboard?id=').replace('/?invite=', '/invite-dashboard?id='));
+                      navigator.clipboard.writeText(generatedLink.replace('/invite?id=', '/invite-dashboard?id=').replace('/?id=', '/invite-dashboard?id=').replace('/invite?invite=', '/invite-dashboard?id=').replace('/?invite=', '/invite-dashboard?id='));
                       confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
                     }}
                     className="flex-1 bg-orange-50 text-orange-600 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-orange-100 transition-colors"
